@@ -860,7 +860,7 @@ static int smb1351_chg_otg_regulator_is_enable(struct regulator_dev *rdev)
 	return (reg & CMD_OTG_EN_BIT) ? 1 : 0;
 }
 
-static struct regulator_ops smb1351_chg_otg_reg_ops = {
+struct regulator_ops smb1351_chg_otg_reg_ops = {
 	.enable		= smb1351_chg_otg_regulator_enable,
 	.disable	= smb1351_chg_otg_regulator_disable,
 	.is_enabled	= smb1351_chg_otg_regulator_is_enable,
@@ -1597,7 +1597,7 @@ static int smb1351_parallel_set_property(struct power_supply *psy,
 				       enum power_supply_property prop,
 				       const union power_supply_propval *val)
 {
-	int rc = 0, index, current_ma;
+	int rc = 0, index;
 	struct smb1351_charger *chip = power_supply_get_drvdata(psy);
 
 	switch (prop) {
@@ -1620,13 +1620,8 @@ static int smb1351_parallel_set_property(struct power_supply *psy,
 					chip->target_fastchg_current_max_ma);
 		break;
 	case POWER_SUPPLY_PROP_CURRENT_MAX:
-		current_ma = val->intval / 1000;
-		if (current_ma > SUSPEND_CURRENT_MA) {
-			index = smb1351_get_closest_usb_setpoint(current_ma);
-			chip->usb_psy_ma = usb_chg_current[index];
-		} else {
-			chip->usb_psy_ma = current_ma;
-		}
+		index = smb1351_get_closest_usb_setpoint(val->intval / 1000);
+		chip->usb_psy_ma = usb_chg_current[index];
 		if (!chip->parallel_charger_suspended)
 			rc = smb1351_set_usb_chg_current(chip,
 						chip->usb_psy_ma);
@@ -1634,7 +1629,7 @@ static int smb1351_parallel_set_property(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_VOLTAGE_MAX:
 		chip->vfloat_mv = val->intval / 1000;
 		if (!chip->parallel_charger_suspended)
-			rc = smb1351_float_voltage_set(chip, chip->vfloat_mv);
+			rc = smb1351_float_voltage_set(chip, val->intval);
 		break;
 	default:
 		return -EINVAL;
