@@ -1,15 +1,14 @@
 /* Copyright (c) 2016-2017 The Linux Foundation. All rights reserved.
-* Copyright (C) 2018 XiaoMi, Inc.
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License version 2 and
-* only version 2 as published by the Free Software Foundation.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
 
 #ifndef __SMB2_CHARGER_H
 #define __SMB2_CHARGER_H
@@ -19,19 +18,14 @@
 #include <linux/regulator/driver.h>
 #include <linux/regulator/consumer.h>
 #include <linux/extcon.h>
-#ifdef CONFIG_FB
-#include <linux/notifier.h>
-#include <linux/fb.h>
-#endif
 #include "storm-watch.h"
 
 enum print_reason {
-PR_INTERRUPT	= BIT(0),
-PR_REGISTER	= BIT(1),
-PR_MISC		= BIT(2),
-PR_PARALLEL	= BIT(3),
-PR_OTG		= BIT(4),
-PR_OEM          = BIT(5),
+	PR_INTERRUPT	= BIT(0),
+	PR_REGISTER	= BIT(1),
+	PR_MISC		= BIT(2),
+	PR_PARALLEL	= BIT(3),
+	PR_OTG		= BIT(4),
 };
 
 #define DEFAULT_VOTER			"DEFAULT_VOTER"
@@ -62,7 +56,6 @@ PR_OEM          = BIT(5),
 #define PD_SUSPEND_SUPPORTED_VOTER	"PD_SUSPEND_SUPPORTED_VOTER"
 #define PL_DELAY_VOTER			"PL_DELAY_VOTER"
 #define CTM_VOTER			"CTM_VOTER"
-#define FB_SCREEN_VOTER			"FB_SCREEN_VOTER"
 #define SW_QC3_VOTER			"SW_QC3_VOTER"
 #define AICL_RERUN_VOTER		"AICL_RERUN_VOTER"
 #define LEGACY_UNKNOWN_VOTER		"LEGACY_UNKNOWN_VOTER"
@@ -72,127 +65,122 @@ PR_OEM          = BIT(5),
 #define OTG_DELAY_VOTER			"OTG_DELAY_VOTER"
 #define USBIN_I_VOTER			"USBIN_I_VOTER"
 #define WEAK_CHARGER_VOTER		"WEAK_CHARGER_VOTER"
-#define CHG_AWAKE_VOTER                 "CHG_AWAKE_VOTER"
-#define CC_FLOAT_VOTER                  "CC_FLOAT_VOTER"
+#define FB_SCREEN_VOTER			"FB_SCREEN_VOTER"
 
 #define VCONN_MAX_ATTEMPTS	3
 #define OTG_MAX_ATTEMPTS	3
-
 #define BOOST_BACK_STORM_COUNT	3
 #define WEAK_CHG_STORM_COUNT	8
-#define CHG_MONITOR_WORK_DELAY_MS       30000
-#define CC_FLOAT_WORK_START_DELAY_MS    700
 #define BATT_TEMP_CRITICAL_LOW		50
-#define BATT_TEMP_COOL_THR		150
 
 enum smb_mode {
-PARALLEL_MASTER = 0,
-PARALLEL_SLAVE,
-NUM_MODES,
+	PARALLEL_MASTER = 0,
+	PARALLEL_SLAVE,
+	NUM_MODES,
 };
 
 enum {
-QC_CHARGER_DETECTION_WA_BIT	= BIT(0),
-BOOST_BACK_WA			= BIT(1),
-TYPEC_CC2_REMOVAL_WA_BIT	= BIT(2),
-QC_AUTH_INTERRUPT_WA_BIT	= BIT(3),
-OTG_WA				= BIT(4),
+	QC_CHARGER_DETECTION_WA_BIT	= BIT(0),
+	BOOST_BACK_WA			= BIT(1),
+	TYPEC_CC2_REMOVAL_WA_BIT	= BIT(2),
+	QC_AUTH_INTERRUPT_WA_BIT	= BIT(3),
+	OTG_WA				= BIT(4),
 };
 
 enum smb_irq_index {
-CHG_ERROR_IRQ = 0,
-CHG_STATE_CHANGE_IRQ,
-STEP_CHG_STATE_CHANGE_IRQ,
-STEP_CHG_SOC_UPDATE_FAIL_IRQ,
-STEP_CHG_SOC_UPDATE_REQ_IRQ,
-OTG_FAIL_IRQ,
-OTG_OVERCURRENT_IRQ,
-OTG_OC_DIS_SW_STS_IRQ,
-TESTMODE_CHANGE_DET_IRQ,
-BATT_TEMP_IRQ,
-BATT_OCP_IRQ,
-BATT_OV_IRQ,
-BATT_LOW_IRQ,
-BATT_THERM_ID_MISS_IRQ,
-BATT_TERM_MISS_IRQ,
-USBIN_COLLAPSE_IRQ,
-USBIN_LT_3P6V_IRQ,
-USBIN_UV_IRQ,
-USBIN_OV_IRQ,
-USBIN_PLUGIN_IRQ,
-USBIN_SRC_CHANGE_IRQ,
-USBIN_ICL_CHANGE_IRQ,
-TYPE_C_CHANGE_IRQ,
-DCIN_COLLAPSE_IRQ,
-DCIN_LT_3P6V_IRQ,
-DCIN_UV_IRQ,
-DCIN_OV_IRQ,
-DCIN_PLUGIN_IRQ,
-DIV2_EN_DG_IRQ,
-DCIN_ICL_CHANGE_IRQ,
-WDOG_SNARL_IRQ,
-WDOG_BARK_IRQ,
-AICL_FAIL_IRQ,
-AICL_DONE_IRQ,
-HIGH_DUTY_CYCLE_IRQ,
-INPUT_CURRENT_LIMIT_IRQ,
-TEMPERATURE_CHANGE_IRQ,
-SWITCH_POWER_OK_IRQ,
-SMB_IRQ_MAX,
+	CHG_ERROR_IRQ = 0,
+	CHG_STATE_CHANGE_IRQ,
+	STEP_CHG_STATE_CHANGE_IRQ,
+	STEP_CHG_SOC_UPDATE_FAIL_IRQ,
+	STEP_CHG_SOC_UPDATE_REQ_IRQ,
+	OTG_FAIL_IRQ,
+	OTG_OVERCURRENT_IRQ,
+	OTG_OC_DIS_SW_STS_IRQ,
+	TESTMODE_CHANGE_DET_IRQ,
+	BATT_TEMP_IRQ,
+	BATT_OCP_IRQ,
+	BATT_OV_IRQ,
+	BATT_LOW_IRQ,
+	BATT_THERM_ID_MISS_IRQ,
+	BATT_TERM_MISS_IRQ,
+	USBIN_COLLAPSE_IRQ,
+	USBIN_LT_3P6V_IRQ,
+	USBIN_UV_IRQ,
+	USBIN_OV_IRQ,
+	USBIN_PLUGIN_IRQ,
+	USBIN_SRC_CHANGE_IRQ,
+	USBIN_ICL_CHANGE_IRQ,
+	TYPE_C_CHANGE_IRQ,
+	DCIN_COLLAPSE_IRQ,
+	DCIN_LT_3P6V_IRQ,
+	DCIN_UV_IRQ,
+	DCIN_OV_IRQ,
+	DCIN_PLUGIN_IRQ,
+	DIV2_EN_DG_IRQ,
+	DCIN_ICL_CHANGE_IRQ,
+	WDOG_SNARL_IRQ,
+	WDOG_BARK_IRQ,
+	AICL_FAIL_IRQ,
+	AICL_DONE_IRQ,
+	HIGH_DUTY_CYCLE_IRQ,
+	INPUT_CURRENT_LIMIT_IRQ,
+	TEMPERATURE_CHANGE_IRQ,
+	SWITCH_POWER_OK_IRQ,
+	SMB_IRQ_MAX,
 };
 
 struct smb_irq_info {
-const char			*name;
-const irq_handler_t		handler;
-const bool			wake;
-const struct storm_watch	storm_data;
-struct smb_irq_data		*irq_data;
-int				irq;
+	const char			*name;
+	const irq_handler_t		handler;
+	const bool			wake;
+	const struct storm_watch	storm_data;
+	struct smb_irq_data		*irq_data;
+	int				irq;
 };
 
 static const unsigned int smblib_extcon_cable[] = {
-EXTCON_USB,
-EXTCON_USB_HOST,
-EXTCON_USB_CC,
-EXTCON_USB_SPEED,
-EXTCON_NONE,
+	EXTCON_USB,
+	EXTCON_USB_HOST,
+	EXTCON_USB_CC,
+	EXTCON_USB_SPEED,
+	EXTCON_NONE,
 };
 
 /* EXTCON_USB and EXTCON_USB_HOST are mutually exclusive */
 static const u32 smblib_extcon_exclusive[] = {0x3, 0};
 
 struct smb_regulator {
-struct regulator_dev	*rdev;
-struct regulator_desc	rdesc;
+	struct regulator_dev	*rdev;
+	struct regulator_desc	rdesc;
 };
 
 struct smb_irq_data {
-void			*parent_data;
-const char		*name;
-struct storm_watch	storm_data;
+	void			*parent_data;
+	const char		*name;
+	struct storm_watch	storm_data;
 };
 
 struct smb_chg_param {
-const char	*name;
-u16		reg;
-int		min_u;
-int		max_u;
-int		step_u;
-int		(*get_proc)(struct smb_chg_param *param,
-			    u8 val_raw);
-int		(*set_proc)(struct smb_chg_param *param,
-			    int val_u,
-			    u8 *val_raw);
+	const char	*name;
+	u16		reg;
+	int		min_u;
+	int		max_u;
+	int		step_u;
+	int		(*get_proc)(struct smb_chg_param *param,
+				    u8 val_raw);
+	int		(*set_proc)(struct smb_chg_param *param,
+				    int val_u,
+				    u8 *val_raw);
 };
 
 struct smb_chg_freq {
-unsigned int		freq_5V;
-unsigned int		freq_6V_8V;
-unsigned int		freq_9V;
-unsigned int		freq_12V;
-unsigned int		freq_removal;
-unsigned int		freq_below_otg_threshold;
-unsigned int		freq_above_otg_threshold;
+	unsigned int		freq_5V;
+	unsigned int		freq_6V_8V;
+	unsigned int		freq_9V;
+	unsigned int		freq_12V;
+	unsigned int		freq_removal;
+	unsigned int		freq_below_otg_threshold;
+	unsigned int		freq_above_otg_threshold;
 };
 
 struct smb_params {
@@ -215,116 +203,106 @@ struct smb_chg_param	freq_boost;
 };
 
 struct parallel_params {
-struct power_supply	*psy;
+	struct power_supply	*psy;
 };
 
 struct smb_iio {
-struct iio_channel	*temp_chan;
-struct iio_channel	*temp_max_chan;
-struct iio_channel	*usbin_i_chan;
-struct iio_channel	*usbin_v_chan;
-struct iio_channel	*batt_i_chan;
-struct iio_channel	*connector_temp_chan;
-struct iio_channel	*connector_temp_thr1_chan;
-struct iio_channel	*connector_temp_thr2_chan;
-struct iio_channel	*connector_temp_thr3_chan;
+	struct iio_channel	*temp_chan;
+	struct iio_channel	*temp_max_chan;
+	struct iio_channel	*usbin_i_chan;
+	struct iio_channel	*usbin_v_chan;
+	struct iio_channel	*batt_i_chan;
+	struct iio_channel	*connector_temp_chan;
+	struct iio_channel	*connector_temp_thr1_chan;
+	struct iio_channel	*connector_temp_thr2_chan;
+	struct iio_channel	*connector_temp_thr3_chan;
 };
 
 struct reg_info {
-u16		reg;
-u8		mask;
-u8		val;
-u8		bak;
-const char	*desc;
+	u16		reg;
+	u8		mask;
+	u8		val;
+	u8		bak;
+	const char	*desc;
 };
 
 struct smb_charger {
-struct device		*dev;
-char			*name;
-struct regmap		*regmap;
-struct smb_irq_info	*irq_info;
-struct smb_params	param;
-struct smb_iio		iio;
-int			*debug_mask;
-enum smb_mode		mode;
-struct smb_chg_freq	chg_freq;
-int			smb_version;
-int			otg_delay_ms;
-int			*weak_chg_icl_ua;
+	struct device		*dev;
+	char			*name;
+	struct regmap		*regmap;
+	struct smb_irq_info	*irq_info;
+	struct smb_params	param;
+	struct smb_iio		iio;
+	int			*debug_mask;
+	enum smb_mode		mode;
+	struct smb_chg_freq	chg_freq;
+	int			smb_version;
+	int			otg_delay_ms;
+	int			*weak_chg_icl_ua;
 
-/* locks */
-struct mutex		lock;
-struct mutex		write_lock;
-struct mutex		ps_change_lock;
-struct mutex		otg_oc_lock;
-struct mutex		vconn_oc_lock;
-#ifdef CONFIG_FB
-struct mutex		screen_lock;
-#endif
+	/* locks */
+	struct mutex		lock;
+	struct mutex		write_lock;
+	struct mutex		ps_change_lock;
+	struct mutex		otg_oc_lock;
+	struct mutex		vconn_oc_lock;
 
-/* power supplies */
-struct power_supply		*batt_psy;
-struct power_supply		*usb_psy;
-struct power_supply		*dc_psy;
-struct power_supply		*bms_psy;
-struct power_supply_desc	usb_psy_desc;
-struct power_supply		*usb_main_psy;
-struct power_supply		*usb_port_psy;
-enum power_supply_type		real_charger_type;
+	/* power supplies */
+	struct power_supply		*batt_psy;
+	struct power_supply		*usb_psy;
+	struct power_supply		*dc_psy;
+	struct power_supply		*bms_psy;
+	struct power_supply_desc	usb_psy_desc;
+	struct power_supply		*usb_main_psy;
+	struct power_supply		*usb_port_psy;
+	enum power_supply_type		real_charger_type;
 
-/* notifiers */
-struct notifier_block	nb;
-#ifdef CONFIG_FB
-struct notifier_block		smb_fb_notif;
-struct delayed_work		screen_on_work;
-bool				screen_on;
-bool				checking_in_progress;
-#endif
-/* parallel charging */
-struct parallel_params	pl;
+	/* notifiers */
+	struct notifier_block	nb;
+	struct notifier_block	fb_state_notifier;
 
-/* regulators */
-struct smb_regulator	*vbus_vreg;
-struct smb_regulator	*vconn_vreg;
-struct regulator	*dpdm_reg;
+	/* parallel charging */
+	struct parallel_params	pl;
 
-/* votables */
-struct votable		*dc_suspend_votable;
-struct votable		*fcc_votable;
-struct votable		*fv_votable;
-struct votable		*usb_icl_votable;
-struct votable		*dc_icl_votable;
-struct votable		*pd_disallowed_votable_indirect;
-struct votable		*pd_allowed_votable;
-struct votable		*awake_votable;
-struct votable		*pl_disable_votable;
-struct votable		*chg_disable_votable;
-struct votable		*pl_enable_votable_indirect;
-struct votable		*hvdcp_disable_votable_indirect;
-struct votable		*hvdcp_enable_votable;
-struct votable		*apsd_disable_votable;
-struct votable		*hvdcp_hw_inov_dis_votable;
-struct votable		*usb_irq_enable_votable;
-struct votable		*typec_irq_disable_votable;
+	/* regulators */
+	struct smb_regulator	*vbus_vreg;
+	struct smb_regulator	*vconn_vreg;
+	struct regulator	*dpdm_reg;
 
-/* work */
-struct work_struct	bms_update_work;
-struct work_struct	rdstd_cc2_detach_work;
-struct delayed_work	hvdcp_detect_work;
-struct delayed_work	ps_change_timeout_work;
-struct delayed_work	clear_hdc_work;
-struct work_struct	otg_oc_work;
-struct work_struct	vconn_oc_work;
-struct delayed_work	otg_ss_done_work;
-struct delayed_work	reg_work;
-struct delayed_work	icl_change_work;
-struct delayed_work	pl_enable_work;
-struct work_struct	legacy_detection_work;
-struct delayed_work	uusb_otg_work;
-struct delayed_work	bb_removal_work;
-struct delayed_work     monitor_low_temp_work;
-struct delayed_work	cc_float_charge_work;
-struct delayed_work	typec_reenable_work;
+	/* votables */
+	struct votable		*dc_suspend_votable;
+	struct votable		*fcc_votable;
+	struct votable		*fv_votable;
+	struct votable		*usb_icl_votable;
+	struct votable		*dc_icl_votable;
+	struct votable		*pd_disallowed_votable_indirect;
+	struct votable		*pd_allowed_votable;
+	struct votable		*awake_votable;
+	struct votable		*pl_disable_votable;
+	struct votable		*chg_disable_votable;
+	struct votable		*pl_enable_votable_indirect;
+	struct votable		*hvdcp_disable_votable_indirect;
+	struct votable		*hvdcp_enable_votable;
+	struct votable		*apsd_disable_votable;
+	struct votable		*hvdcp_hw_inov_dis_votable;
+	struct votable		*usb_irq_enable_votable;
+	struct votable		*typec_irq_disable_votable;
+
+	/* work */
+	struct work_struct	bms_update_work;
+	struct work_struct	rdstd_cc2_detach_work;
+	struct delayed_work	hvdcp_detect_work;
+	struct delayed_work	ps_change_timeout_work;
+	struct delayed_work	clear_hdc_work;
+	struct work_struct	otg_oc_work;
+	struct work_struct	vconn_oc_work;
+	struct delayed_work	otg_ss_done_work;
+	struct delayed_work	icl_change_work;
+	struct delayed_work	pl_enable_work;
+	struct work_struct	legacy_detection_work;
+	struct delayed_work	uusb_otg_work;
+	struct delayed_work	bb_removal_work;
+	struct delayed_work	fb_state_work;
 
 	/* cached status */
 	int			voltage_min_uv;
@@ -358,7 +336,6 @@ struct delayed_work	typec_reenable_work;
 	int			otg_attempts;
 	int			vconn_attempts;
 	int			default_icl_ua;
-	int			last_soc;
 	int			otg_cl_ua;
 	bool			uusb_apsd_rerun_done;
 	bool			pd_hard_reset;
@@ -373,6 +350,7 @@ struct delayed_work	typec_reenable_work;
 	u8			float_cfg;
 	bool			use_extcon;
 	bool			otg_present;
+	bool			screen_on;
 
 	/* workaround flag */
 	u32			wa_flags;
@@ -380,8 +358,6 @@ struct delayed_work	typec_reenable_work;
 	bool			typec_en_dis_active;
 	int			boost_current_ua;
 	int			temp_speed_reading_count;
-	bool                    cc_float_detected;
-	bool			float_rerun_apsd;
 
 	/* extcon for VBUS / ID notification to USB for uUSB */
 	struct extcon_dev	*extcon;
@@ -431,7 +407,6 @@ irqreturn_t smblib_handle_otg_overcurrent(int irq, void *data);
 irqreturn_t smblib_handle_chg_state_change(int irq, void *data);
 irqreturn_t smblib_handle_batt_temp_changed(int irq, void *data);
 irqreturn_t smblib_handle_batt_psy_changed(int irq, void *data);
-irqreturn_t smblib_handle_usbin_collapse(int irq, void *data);
 irqreturn_t smblib_handle_usb_psy_changed(int irq, void *data);
 irqreturn_t smblib_handle_usbin_uv(int irq, void *data);
 irqreturn_t smblib_handle_usb_plugin(int irq, void *data);
@@ -462,8 +437,6 @@ int smblib_get_prop_system_temp_level(struct smb_charger *chg,
 int smblib_get_prop_input_current_limited(struct smb_charger *chg,
 				union power_supply_propval *val);
 int smblib_get_prop_batt_voltage_now(struct smb_charger *chg,
-				union power_supply_propval *val);
-int smblib_get_prop_batt_charge_full(struct smb_charger *chg,
 				union power_supply_propval *val);
 int smblib_get_prop_batt_current_now(struct smb_charger *chg,
 				union power_supply_propval *val);
