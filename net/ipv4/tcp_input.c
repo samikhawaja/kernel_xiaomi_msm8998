@@ -4217,7 +4217,7 @@ static void tcp_sack_remove(struct tcp_sock *tp)
 {
 	struct tcp_sack_block *sp = &tp->selective_acks[0];
 	int num_sacks = tp->rx_opt.num_sacks;
-	int this_sack;
+	unsigned int this_sack;
 
 	/* Empty ofo queue, hence, all the SACKs are eaten. Clear. */
 	if (skb_queue_empty(&tp->out_of_order_queue)) {
@@ -4228,7 +4228,7 @@ static void tcp_sack_remove(struct tcp_sock *tp)
 	for (this_sack = 0; this_sack < num_sacks;) {
 		/* Check if the start of the sack is covered by RCV.NXT. */
 		if (!before(tp->rcv_nxt, sp->start_seq)) {
-			int i;
+			unsigned int i;
 
 			/* RCV.NXT must cover all the block! */
 			WARN_ON(before(tp->rcv_nxt, sp->end_seq));
