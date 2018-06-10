@@ -889,7 +889,7 @@ struct lpm_cluster *parse_cluster(struct device_node *node,
 	struct device_node *n;
 	char *key;
 	int ret = 0;
-	int i, j;
+	unsigned int i, j;
 
 	c = devm_kzalloc(&lpm_pdev->dev, sizeof(*c), GFP_KERNEL);
 	if (!c)
