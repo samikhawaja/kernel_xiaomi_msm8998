@@ -1348,6 +1348,7 @@ static int msm_ispif_stop_frame_boundary(struct ispif_device *ispif,
 	uint32_t intf_addr;
 	enum msm_ispif_vfe_intf vfe_intf;
 	uint32_t stop_flag = 0;
+	unsigned int timeout_value = ISPIF_TIMEOUT_ALL_US;
 
 	BUG_ON(!ispif);
 	BUG_ON(!params);
@@ -1414,14 +1415,17 @@ static int msm_ispif_stop_frame_boundary(struct ispif_device *ispif,
 			goto end;
 		}
 
+#ifdef CONFIG_MACH_XIAOMI_MSM8998
+		if ((params->reserved_param) != 0)
+		{
+			timeout_value = params->reserved_param;
+		}
+#endif
 		rc = readl_poll_timeout(ispif->base + intf_addr, stop_flag,
 					(stop_flag & 0xF) == 0xF,
 					ISPIF_TIMEOUT_SLEEP_US,
-#ifdef CONFIG_MACH_XIAOMI_MSM8998
-					(params->reserved_param ? params->reserved_param : ISPIF_TIMEOUT_ALL_US));
-#else
-					ISPIF_TIMEOUT_ALL_US);
-#endif
+					timeout_value);
+
 		if (rc < 0)
 			goto end;
 		if (cid_right_mask) {
