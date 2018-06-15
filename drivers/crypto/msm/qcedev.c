@@ -581,7 +581,7 @@ static int qcedev_sha_update_max_xfer(struct qcedev_async_req *qcedev_areq,
 
 	uint32_t sha_pad_len = 0;
 	uint32_t trailing_buf_len = 0;
-	uint32_t t_buf = handle->sha_ctxt.trailing_buf_len;
+	uint8_t t_buf = handle->sha_ctxt.trailing_buf_len;
 	uint32_t sha_block_size;
 
 	total = qcedev_areq->sha_op_req.data_len + t_buf;
